@@ -15,7 +15,7 @@ function App() {
   };
 
   const fetchTasks = async () => {
-    const res = await fetch("http://localhost:5000/api/tasks");
+    const res = await fetch("https://task-tracker-k6u4.onrender.com/api/tasks");
     const data = await res.json();
     setTasks(data);
   };
@@ -38,13 +38,13 @@ function App() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/api/tasks/${id}`, { method: "DELETE" });
+    await fetch(`https://task-tracker-k6u4.onrender.com/api/tasks/${id}`, { method: "DELETE" });
     setTasks((prev) => prev.filter((t) => t._id !== id));
     showToast("Task deleted!");
   };
 
   const handleStatusChange = async (id, newStatus) => {
-    const res = await fetch(`http://localhost:5000/api/tasks/${id}`, {
+    const res = await fetch(`https://task-tracker-k6u4.onrender.com/api/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),

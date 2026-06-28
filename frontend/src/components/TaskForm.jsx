@@ -15,7 +15,7 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
     const taskData = { title, description, status };
 
     if (editTask) {
-      const res = await fetch(`http://localhost:5000/api/tasks/${editTask._id}`, {
+      const res = await fetch(`https://task-tracker-k6u4.onrender.com/api/tasks/${editTask._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),
@@ -23,7 +23,7 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       const updated = await res.json();
       onTaskUpdated(updated);
     } else {
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch("https://task-tracker-k6u4.onrender.com/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),
