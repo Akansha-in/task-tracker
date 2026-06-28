@@ -4,7 +4,6 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("todo");
-  const [priority, setPriority] = useState("medium");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -12,12 +11,10 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       setTitle(editTask.title);
       setDescription(editTask.description || "");
       setStatus(editTask.status);
-      setPriority(editTask.priority || "medium");
     } else {
       setTitle("");
       setDescription("");
       setStatus("todo");
-      setPriority("medium");
     }
   }, [editTask]);
 
@@ -27,7 +24,7 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       return;
     }
 
-    const taskData = { title, description, status, priority };
+    const taskData = { title, description, status };
 
     if (editTask) {
       const res = await fetch(`https://task-tracker-k6u4.onrender.com/api/tasks/${editTask._id}`, {
@@ -70,11 +67,6 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
           <option value="todo">Todo</option>
           <option value="in-progress">In Progress</option>
           <option value="done">Done</option>
-        </select>
-        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-          <option value="low">🟢 Low</option>
-          <option value="medium">🟡 Medium</option>
-          <option value="high">🔴 High</option>
         </select>
       </div>
       {editTask && (
