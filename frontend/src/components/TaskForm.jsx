@@ -80,3 +80,13 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       {editTask && (
         <button className="cancel-btn" onClick={onCancel}>
           Cancel
+        </button>
+      )}
+      <button onClick={handleSubmit}>
+        {editTask ? "Update Task" : "Add Task"}
+      </button>
+    </div>
+  );
+}
+
+export default TaskForm;
