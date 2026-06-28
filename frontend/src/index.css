@@ -345,3 +345,52 @@ body {
   margin-top: 60px;
   font-size: 15px;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #2e2e2e;
+  border-top-color: #db4035;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.search-input {
+  padding: 6px 14px;
+  border: 1px solid #2e2e2e;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  background: #242424;
+  color: #e0e0e0;
+  width: 200px;
+}
+
+.search-input:focus {
+  border-color: #db4035;
+}
+
+.search-input::placeholder {
+  color: #555;
+}
+
+.priority-badge {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.priority-badge.high { background: #3a1f1f; color: #e74c3c; }
+.priority-badge.medium { background: #2e2510; color: #e8a838; }
+.priority-badge.low { background: #1a2e1a; color: #4caf50; }

@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
-  const [title, setTitle] = useState(editTask ? editTask.title : "");
-  const [description, setDescription] = useState(editTask ? editTask.description : "");
-  const [status, setStatus] = useState(editTask ? editTask.status : "todo");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("todo");
+  const [priority, setPriority] = useState("medium");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (editTask) {
+      setTitle(editTask.title);
+      setDescription(editTask.description || "");
+      setStatus(editTask.status);
+      setPriority(editTask.priority || "medium");
+    } else {
+      setTitle("");
+      setDescription("");
+      setStatus("todo");
+      setPriority("medium");
+    }
+  }, [editTask]);
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -12,7 +27,7 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       return;
     }
 
-    const taskData = { title, description, status };
+    const taskData = { title, description, status, priority };
 
     if (editTask) {
       const res = await fetch(`https://task-tracker-k6u4.onrender.com/api/tasks/${editTask._id}`, {
@@ -32,9 +47,6 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
       onTaskAdded(created);
     }
 
-    setTitle("");
-    setDescription("");
-    setStatus("todo");
     setError("");
   };
 
@@ -53,21 +65,18 @@ function TaskForm({ onTaskAdded, editTask, onTaskUpdated, onCancel }) {
         onChange={(e) => setDescription(e.target.value)}
         rows={3}
       />
-      <select value={status} onChange={(e) => setStatus(e.target.value)}>
-        <option value="todo">Todo</option>
-        <option value="in-progress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
+      <div className="form-row">
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="todo">Todo</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <option value="low">🟢 Low</option>
+          <option value="medium">🟡 Medium</option>
+          <option value="high">🔴 High</option>
+        </select>
+      </div>
       {editTask && (
         <button className="cancel-btn" onClick={onCancel}>
           Cancel
-        </button>
-      )}
-      <button onClick={handleSubmit}>
-        {editTask ? "Update Task" : "Add Task"}
-      </button>
-    </div>
-  );
-}
-
-export default TaskForm;

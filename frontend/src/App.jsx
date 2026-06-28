@@ -3,9 +3,11 @@ import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("newest");
+  const [search, setSearch] = useState("");
   const [editTask, setEditTask] = useState(null);
   const [toast, setToast] = useState("");
 
@@ -15,9 +17,11 @@ function App() {
   };
 
   const fetchTasks = async () => {
+    setLoading(true);
     const res = await fetch("https://task-tracker-k6u4.onrender.com/api/tasks");
     const data = await res.json();
     setTasks(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,8 +63,13 @@ function App() {
     ? tasks
     : tasks.filter((t) => t.status === filter);
 
+  // Search
+  const searchedTasks = filteredTasks.filter((t) =>
+    t.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   // Sort
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
+  const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sort === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
     if (sort === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
     return 0;
@@ -75,10 +84,10 @@ function App() {
   return (
     <>
       <div className="header">
-  <div>
-    <h1>Task Tracker</h1>
-  </div>
-</div>
+        <div>
+          <h1>Task Tracker</h1>
+        </div>
+      </div>
 
       <div className="container">
         {/* Stats */}
@@ -128,6 +137,14 @@ function App() {
             ))}
           </div>
 
+          <input
+            className="search-input"
+            type="text"
+            placeholder="🔍 Search tasks..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
           <select
             className="sort-select"
             value={sort}
@@ -138,13 +155,18 @@ function App() {
           </select>
         </div>
 
-        {/* Task List */}
-        <TaskList
-          tasks={sortedTasks}
-          onDelete={handleDelete}
-          onEdit={setEditTask}
-          onStatusChange={handleStatusChange}
-        />
+        {loading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <TaskList
+            tasks={sortedTasks}
+            onDelete={handleDelete}
+            onEdit={setEditTask}
+            onStatusChange={handleStatusChange}
+          />
+        )}
 
         {toast && <div className="toast">{toast}</div>}
       </div>

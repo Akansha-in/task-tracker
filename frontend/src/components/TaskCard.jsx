@@ -9,6 +9,11 @@ function TaskCard({ task, onDelete, onEdit, onStatusChange }) {
       </div>
 
       {task.description && <p>{task.description}</p>}
+      <div style={{ marginBottom: "12px" }}>
+        <span className={`priority-badge ${task.priority}`}>
+          {task.priority === "high" ? "🔴 High" : task.priority === "medium" ? "🟡 Medium" : "🟢 Low"}
+        </span>
+      </div>
 
       <div className="actions">
         <select
